@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import anime, { AnimeInstance } from 'animejs';
+import { negate } from 'ramda';
 import { tap } from 'rxjs';
 
 @Component({
@@ -28,6 +29,12 @@ export class AppComponent implements AfterViewInit {
     const targets = document.querySelector('.room');
     const autoplay = this.autoplay.value;
     const height = routeDivHeight - roomDivHeight;
+    this.anime = anime({
+      targets,
+      autoplay,
+      translateY: negate(height),
+      easing: 'linear',
+    });
   }
 
   play() {
