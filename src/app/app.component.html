@@ -1,4 +1,26 @@
-<div class="container" fxLayout="row">
-  <div class="room"></div>
-  <div class="route"></div>
-</div>
+<section class="container" fxLayout="column" fxLayoutAlign="center center">
+  <div class="machine" fxLayout="row" fxLayoutAlign="center end" fxFlex>
+    <div class="room"></div>
+    <div class="route"></div>
+  </div>
+  <section
+    class="actions"
+    fxLayout="row grid"
+    fxLayoutAlign="center"
+    fxLayoutGap="1vw"
+  >
+    <button mat-raised-button color="primary" (click)="start()">
+      <mat-icon>play_arrow</mat-icon>
+      start
+    </button>
+    <button mat-raised-button color="warn" (click)="pause()">
+      <mat-icon>stop</mat-icon>pause
+    </button>
+    <button mat-raised-button color="accent" (click)="restart()">
+      <mat-icon>restart_alt</mat-icon>restart
+    </button>
+    <button mat-raised-button color="accent" (click)="reverse()">
+      <mat-icon>restart_alt</mat-icon>reverse
+    </button>
+  </section>
+</section>
