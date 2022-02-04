@@ -21,7 +21,8 @@ export class AppComponent implements AfterViewInit {
   );
 
   readonly autoplayChange$ = this.autoplay.valueChanges.pipe(
-    tap((autoplay) => localStorage.setItem('autoplay', autoplay))
+    tap((autoplay) => localStorage.setItem('autoplay', autoplay)),
+    tap(() => this.restart())
   );
 
   ngAfterViewInit(): void {
