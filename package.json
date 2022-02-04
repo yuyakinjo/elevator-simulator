@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~13.2.1",
     "@angular/router": "~13.2.1",
     "animejs": "^3.2.1",
+    "ramda": "^0.28.0",
     "rxjs": "^7.5.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -33,6 +34,7 @@
     "@types/animejs": "^3.1.4",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
+    "@types/ramda": "^0.27.64",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
