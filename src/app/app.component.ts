@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     this.anime = anime({ targets, autoplay, translateY: -100 });
   }
 
-  start() {
+  play() {
     this.anime.play();
   }
 
@@ -39,5 +39,6 @@ export class AppComponent implements OnInit {
 
   reverse(): void {
     this.anime.reverse();
+    this.play();
   }
 }
