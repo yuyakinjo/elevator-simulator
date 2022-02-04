@@ -8,8 +8,11 @@ import { tap } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   anime!: AnimeInstance;
+
+  @ViewChild('room') room!: ElementRef<HTMLDivElement>;
+  @ViewChild('route') route!: ElementRef<HTMLDivElement>;
 
   readonly autoplay = new FormControl(
     localStorage.getItem('autoplay')?.includes('true') ?? true
@@ -19,10 +22,12 @@ export class AppComponent implements OnInit {
     tap((autoplay) => localStorage.setItem('autoplay', autoplay))
   );
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    const roomDivHeight = this.room.nativeElement.clientHeight;
+    const routeDivHeight = this.route.nativeElement.clientHeight;
     const targets = document.querySelector('.room');
     const autoplay = this.autoplay.value;
-    this.anime = anime({ targets, autoplay, translateY: -100 });
+    const height = routeDivHeight - roomDivHeight;
   }
 
   play() {
