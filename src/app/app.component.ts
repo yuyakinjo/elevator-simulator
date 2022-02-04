@@ -28,14 +28,16 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const roomDivHeight = this.room.nativeElement.clientHeight;
     const routeDivHeight = this.route.nativeElement.clientHeight;
+    const height = routeDivHeight - roomDivHeight;
     const targets = document.querySelector('.room');
     const autoplay = this.autoplay.value;
-    const height = routeDivHeight - roomDivHeight;
+    const duration = 3000;
     this.anime = anime({
       targets,
       autoplay,
+      duration,
       translateY: negate(height),
-      easing: 'linear',
+      easing: 'easeInOutExpo',
     });
   }
 
