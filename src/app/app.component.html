@@ -1,3 +1,5 @@
+<ng-container *ngIf="autoplayChange$ | async"></ng-container>
+
 <section class="container" fxLayout="column" fxLayoutAlign="center center">
   <div class="machine" fxLayout="row" fxLayoutAlign="center end" fxFlex>
     <div class="room"></div>
@@ -10,17 +12,19 @@
     fxLayoutGap="1vw"
   >
     <button mat-raised-button color="primary" (click)="start()">
-      <mat-icon>play_arrow</mat-icon>
-      start
+      <mat-icon>play_arrow</mat-icon>{{ "start" | uppercase }}
     </button>
     <button mat-raised-button color="warn" (click)="pause()">
-      <mat-icon>stop</mat-icon>pause
+      <mat-icon>stop</mat-icon>{{ "pause" | uppercase }}
     </button>
     <button mat-raised-button color="accent" (click)="restart()">
-      <mat-icon>restart_alt</mat-icon>restart
+      <mat-icon>refresh</mat-icon>{{ "restart" | uppercase }}
     </button>
     <button mat-raised-button color="accent" (click)="reverse()">
-      <mat-icon>restart_alt</mat-icon>reverse
+      <mat-icon>restart_alt</mat-icon>{{ "reverse" | uppercase }}
     </button>
+    <mat-slide-toggle [formControl]="autoplay" [style.color]="'white'">{{
+      "auto play" | uppercase
+    }}</mat-slide-toggle>
   </section>
 </section>

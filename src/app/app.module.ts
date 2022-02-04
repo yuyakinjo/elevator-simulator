@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +13,7 @@ import { MaterialsModule } from './modules/materials.module';
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialsModule,
   ],

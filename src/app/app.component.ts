@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import anime, { AnimeInstance } from 'animejs';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +10,19 @@ import anime, { AnimeInstance } from 'animejs';
 })
 export class AppComponent implements OnInit {
   anime!: AnimeInstance;
+
+  readonly autoplay = new FormControl(
+    localStorage.getItem('autoplay')?.includes('true') ?? true
+  );
+
+  readonly autoplayChange$ = this.autoplay.valueChanges.pipe(
+    tap((autoplay) => localStorage.setItem('autoplay', autoplay))
+  );
+
   ngOnInit(): void {
     const targets = document.querySelector('.room');
-    this.anime = anime({ targets, translateY: '-100', autoplay: false });
+    const autoplay = this.autoplay.value;
+    this.anime = anime({ targets, autoplay, translateY: -100 });
   }
 
   start() {
