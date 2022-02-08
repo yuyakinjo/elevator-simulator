@@ -6,9 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialsModule } from './modules/materials.module';
+import { SortPipe } from './pipes/sort.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SortPipe],
   imports: [
     BrowserModule,
     AppRoutingModule,
