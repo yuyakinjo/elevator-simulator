@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
 import { FormControl } from '@angular/forms';
-import anime from 'animejs';
+import anime, { AnimeInstance, AnimeTimelineInstance } from 'animejs';
+import { last } from 'ramda';
 import { tap } from 'rxjs';
 
 @Component({
@@ -10,7 +11,7 @@ import { tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements AfterViewInit {
-  anime!: any;
+  anime!: AnimeTimelineInstance;
   duration = 500;
   height = 0;
   oneFloorHeight = 0;
@@ -18,9 +19,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('room') room!: ElementRef<HTMLDivElement>;
   @ViewChild('route') route!: ElementRef<HTMLDivElement>;
 
-  readonly autoplay = new FormControl(
-    localStorage.getItem('autoplay')?.includes('true') ?? true
-  );
+  readonly autoplay = new FormControl(localStorage.getItem('autoplay')?.includes('true') ?? true);
 
   readonly autoplayChange$ = this.autoplay.valueChanges.pipe(
     tap((autoplay) => localStorage.setItem('autoplay', autoplay)),
@@ -45,17 +44,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   up() {
-    const currentValue = this.anime.children.map((child: any) =>
-      child.animations.map((animation: any) => animation.currentValue)
-    );
-    console.log('🚀 ~ up ~ this.anime', anime.get(this.anime, 'children'));
-
-    console.log('🚀 ~ up ~ currentValue', currentValue);
-    const last = -1;
-    const translateY = currentValue.length
-      ? [`${currentValue.at(last)}`, `-=${this.oneFloorHeight}`]
-      : [`-=${this.oneFloorHeight}`];
-    this.anime.add({ translateY }, last); // -1 でないとアニメーションがちらつくため
+    const children = anime.get(this.anime, 'children') as unknown as AnimeInstance[];
+    const currentValues = children.flatMap((child) => child.animations.map((animation) => animation.currentValue));
+    const lastValue = last(currentValues);
+    const to = `-=${this.oneFloorHeight}`;
+    const translateY = currentValues.length ? [`${lastValue}`, to] : [to];
+    this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
   }
 
   play() {
