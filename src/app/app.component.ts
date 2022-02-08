@@ -49,18 +49,19 @@ export class AppComponent implements AfterViewInit {
     return last(currentValues);
   }
 
-  up() {
+  #move(direction: 'up' | 'down' = 'up'): void {
     const lastPosition = this.#getLastPosition();
-    const to = `-=${this.oneFloorHeight}`;
+    const to = direction === 'up' ? `-=${this.oneFloorHeight}` : `+=${this.oneFloorHeight}`;
     const translateY = lastPosition ? [`${lastPosition}`, to] : [to];
     this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
   }
 
+  up() {
+    this.#move('up');
+  }
+
   down() {
-    const lastPosition = this.#getLastPosition();
-    const to = `+=${this.oneFloorHeight}`;
-    const translateY = lastPosition ? [`${lastPosition}`, to] : [to];
-    this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
+    this.#move('down');
   }
 
   play() {
