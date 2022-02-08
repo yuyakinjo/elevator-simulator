@@ -11,6 +11,9 @@
     fxLayoutAlign="center"
     fxLayoutGap="1vw"
   >
+    <button mat-raised-button color="primary" (click)="up()">
+      <mat-icon>add</mat-icon>{{ "up" | uppercase }}
+    </button>
     <button mat-raised-button color="primary" (click)="play()">
       <mat-icon>play_arrow</mat-icon>{{ "start" | uppercase }}
     </button>

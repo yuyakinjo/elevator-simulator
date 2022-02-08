@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
 import { FormControl } from '@angular/forms';
-import anime, { AnimeInstance } from 'animejs';
-import { negate } from 'ramda';
+import anime from 'animejs';
 import { tap } from 'rxjs';
 
 @Component({
@@ -11,7 +10,10 @@ import { tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements AfterViewInit {
-  anime!: AnimeInstance;
+  anime!: any;
+  duration = 500;
+  height = 0;
+  oneFloorHeight = 0;
 
   @ViewChild('room') room!: ElementRef<HTMLDivElement>;
   @ViewChild('route') route!: ElementRef<HTMLDivElement>;
@@ -28,17 +30,32 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const roomDivHeight = this.room.nativeElement.clientHeight;
     const routeDivHeight = this.route.nativeElement.clientHeight;
-    const height = routeDivHeight - roomDivHeight;
-    const targets = document.querySelector('.room');
+    this.height = routeDivHeight - roomDivHeight;
+    this.oneFloorHeight = this.height / 10;
     const autoplay = this.autoplay.value;
-    const duration = 3000;
-    this.anime = anime({
+    const targets = document.querySelector('.room');
+    const duration = this.duration;
+    const easing = 'easeInOutExpo';
+    this.anime = anime.timeline({
       targets,
       autoplay,
       duration,
-      translateY: negate(height),
-      easing: 'easeInOutExpo',
+      easing,
     });
+  }
+
+  up() {
+    const currentValue = this.anime.children.map((child: any) =>
+      child.animations.map((animation: any) => animation.currentValue)
+    );
+    console.log('🚀 ~ up ~ this.anime', anime.get(this.anime, 'children'));
+
+    console.log('🚀 ~ up ~ currentValue', currentValue);
+    const last = -1;
+    const translateY = currentValue.length
+      ? [`${currentValue.at(last)}`, `-=${this.oneFloorHeight}`]
+      : [`-=${this.oneFloorHeight}`];
+    this.anime.add({ translateY }, last); // -1 でないとアニメーションがちらつくため
   }
 
   play() {
