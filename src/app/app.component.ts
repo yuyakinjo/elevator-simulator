@@ -1,6 +1,6 @@
 import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
 import { FormControl } from '@angular/forms';
-import anime, { AnimeInstance, AnimeTimelineInstance } from 'animejs';
+import anime, { AnimeInstance, AnimeTimelineInstance, EasingOptions } from 'animejs';
 import { last } from 'ramda';
 import { tap } from 'rxjs';
 
@@ -17,6 +17,7 @@ export class AppComponent implements AfterViewInit, AfterContentChecked {
   oneFloorHeight = 0;
   disable = false;
   oneFloorHeightPx = '';
+  easing: EasingOptions = 'easeInOutSine';
 
   @ViewChild('room') room!: ElementRef<HTMLDivElement>;
   @ViewChild('route') route!: ElementRef<HTMLDivElement>;
@@ -42,7 +43,7 @@ export class AppComponent implements AfterViewInit, AfterContentChecked {
     const autoplay = this.autoplay.value;
     const targets = document.querySelector('.room');
     const duration = this.duration;
-    const easing = 'easeInOutExpo';
+    const easing = this.easing;
     this.anime = anime.timeline({
       targets,
       autoplay,
