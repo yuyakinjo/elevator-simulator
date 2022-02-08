@@ -43,21 +43,23 @@ export class AppComponent implements AfterViewInit {
     });
   }
 
-  up() {
+  #getLastPosition(): string | undefined {
     const children = anime.get(this.anime, 'children') as unknown as AnimeInstance[];
     const currentValues = children.flatMap(({ animations }) => animations.map(({ currentValue }) => currentValue));
-    const lastValue = last(currentValues);
+    return last(currentValues);
+  }
+
+  up() {
+    const lastPosition = this.#getLastPosition();
     const to = `-=${this.oneFloorHeight}`;
-    const translateY = currentValues.length ? [`${lastValue}`, to] : [to];
+    const translateY = lastPosition ? [`${lastPosition}`, to] : [to];
     this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
   }
 
   down() {
-    const children = anime.get(this.anime, 'children') as unknown as AnimeInstance[];
-    const currentValues = children.flatMap(({ animations }) => animations.map(({ currentValue }) => currentValue));
-    const lastValue = last(currentValues);
+    const lastPosition = this.#getLastPosition();
     const to = `+=${this.oneFloorHeight}`;
-    const translateY = currentValues.length ? [`${lastValue}`, to] : [to];
+    const translateY = lastPosition ? [`${lastPosition}`, to] : [to];
     this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
   }
 
