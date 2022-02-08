@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
 import { FormControl } from '@angular/forms';
 import anime, { AnimeInstance, AnimeTimelineInstance } from 'animejs';
 import { last } from 'ramda';
@@ -15,6 +15,7 @@ export class AppComponent implements AfterViewInit {
   duration = 500;
   height = 0;
   oneFloorHeight = 0;
+  disable = false;
 
   @ViewChild('room') room!: ElementRef<HTMLDivElement>;
   @ViewChild('route') route!: ElementRef<HTMLDivElement>;
@@ -26,11 +27,13 @@ export class AppComponent implements AfterViewInit {
     tap(() => this.restart())
   );
 
+  constructor(private view: ChangeDetectorRef) {}
+
   ngAfterViewInit(): void {
     const roomDivHeight = this.room.nativeElement.clientHeight;
     const routeDivHeight = this.route.nativeElement.clientHeight;
     this.height = routeDivHeight - roomDivHeight;
-    this.oneFloorHeight = this.height / 10;
+    this.oneFloorHeight = Math.floor(this.height / 10);
     const autoplay = this.autoplay.value;
     const targets = document.querySelector('.room');
     const duration = this.duration;
@@ -49,19 +52,27 @@ export class AppComponent implements AfterViewInit {
     return last(currentValues);
   }
 
-  #move(direction: 'up' | 'down' = 'up'): void {
+  async #move(direction: 'up' | 'down' = 'up'): Promise<void> {
     const lastPosition = this.#getLastPosition();
+    const position = Number(lastPosition?.replace('-', '').replace('px', '')) || 0;
+    if (direction === 'up' && position + this.oneFloorHeight > this.height) return alert("You can't go up");
+    if (direction === 'down' && !position) return alert("You can't go down");
+    if (direction === 'down' && position > this.height) return alert("You can't go down");
+    this.disable = true;
     const to = direction === 'up' ? `-=${this.oneFloorHeight}` : `+=${this.oneFloorHeight}`;
     const translateY = lastPosition ? [`${lastPosition}`, to] : [to];
     this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
+    await this.anime.finished;
+    this.disable = false;
+    this.view.markForCheck();
   }
 
-  up() {
-    this.#move('up');
+  async up() {
+    await this.#move();
   }
 
-  down() {
-    this.#move('down');
+  async down() {
+    await this.#move('down');
   }
 
   play() {

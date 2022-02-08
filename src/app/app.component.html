@@ -6,8 +6,10 @@
     <div class="route" #route></div>
   </div>
   <section class="actions" fxLayout="row grid" fxLayoutAlign="center" fxLayoutGap="1vw">
-    <button mat-raised-button color="primary" (click)="up()"><mat-icon>add</mat-icon>{{ "up" | uppercase }}</button>
-    <button mat-raised-button color="primary" (click)="down()">
+    <button mat-raised-button color="primary" (click)="up()" [disabled]="disable">
+      <mat-icon>add</mat-icon>{{ "up" | uppercase }}
+    </button>
+    <button mat-raised-button color="primary" (click)="down()" [disabled]="disable">
       <mat-icon>remove</mat-icon>{{ "down" | uppercase }}
     </button>
     <button mat-raised-button color="primary" (click)="play()">
