@@ -3,7 +3,13 @@
 <section class="container" fxLayout="column" fxLayoutAlign="center center">
   <div class="machine" fxLayout="row" fxLayoutAlign="center end" fxFlex>
     <div class="room" #room></div>
-    <div class="route" #route></div>
+    <section class="route" #route>
+      <div *ngIf="oneFloorHeightPx">
+        <div *ngFor="let num of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] | sort" [style.height]="oneFloorHeightPx">
+          {{ num }}
+        </div>
+      </div>
+    </section>
   </div>
   <section class="actions" fxLayout="row grid" fxLayoutAlign="center" fxLayoutGap="1vw">
     <button mat-raised-button color="primary" (click)="up()" [disabled]="disable">

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
+import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core'; // prettier-ignore
 import { FormControl } from '@angular/forms';
 import anime, { AnimeInstance, AnimeTimelineInstance } from 'animejs';
 import { last } from 'ramda';
@@ -10,12 +10,13 @@ import { tap } from 'rxjs';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, AfterContentChecked {
   anime!: AnimeTimelineInstance;
   duration = 500;
   height = 0;
   oneFloorHeight = 0;
   disable = false;
+  oneFloorHeightPx = '';
 
   @ViewChild('room') room!: ElementRef<HTMLDivElement>;
   @ViewChild('route') route!: ElementRef<HTMLDivElement>;
@@ -29,11 +30,15 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private view: ChangeDetectorRef) {}
 
+  ngAfterContentChecked(): void {
+    this.oneFloorHeight = Math.floor(this.height / 10);
+    this.oneFloorHeightPx = `${this.oneFloorHeight}px`;
+  }
+
   ngAfterViewInit(): void {
     const roomDivHeight = this.room.nativeElement.clientHeight;
     const routeDivHeight = this.route.nativeElement.clientHeight;
     this.height = routeDivHeight - roomDivHeight;
-    this.oneFloorHeight = Math.floor(this.height / 10);
     const autoplay = this.autoplay.value;
     const targets = document.querySelector('.room');
     const duration = this.duration;
@@ -44,6 +49,7 @@ export class AppComponent implements AfterViewInit {
       duration,
       easing,
     });
+    this.view.markForCheck();
   }
 
   #getLastPosition(): string | undefined {
