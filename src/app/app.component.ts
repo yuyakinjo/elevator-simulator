@@ -45,9 +45,18 @@ export class AppComponent implements AfterViewInit {
 
   up() {
     const children = anime.get(this.anime, 'children') as unknown as AnimeInstance[];
-    const currentValues = children.flatMap((child) => child.animations.map((animation) => animation.currentValue));
+    const currentValues = children.flatMap(({ animations }) => animations.map(({ currentValue }) => currentValue));
     const lastValue = last(currentValues);
     const to = `-=${this.oneFloorHeight}`;
+    const translateY = currentValues.length ? [`${lastValue}`, to] : [to];
+    this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
+  }
+
+  down() {
+    const children = anime.get(this.anime, 'children') as unknown as AnimeInstance[];
+    const currentValues = children.flatMap(({ animations }) => animations.map(({ currentValue }) => currentValue));
+    const lastValue = last(currentValues);
+    const to = `+=${this.oneFloorHeight}`;
     const translateY = currentValues.length ? [`${lastValue}`, to] : [to];
     this.anime.add({ translateY }, -1); // -1 でないとアニメーションがちらつくため
   }
